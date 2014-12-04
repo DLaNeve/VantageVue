@@ -1,6 +1,9 @@
 ﻿Imports System.Collections.Specialized
 
 Module VantageVue
+
+    Private Property GetBarometerData_V As Single
+
     Sub Main()
         Dim msgs As StringCollection = New StringCollection
         Open_USB_Port()
@@ -9,6 +12,7 @@ Module VantageVue
         msgs.Add(Create_Wind_msg())
         msgs.Add(Create_Temp_msg())
         msgs.Add(Create_Bar_msg())
+        msgs.Add(Create_Humidity_msg())
         Broadcast_MSG(msgs)
 
         msgs.Clear()
@@ -53,19 +57,28 @@ Module VantageVue
         Dim temp As Single
         Dim TempMsg As String
 
-        temp = GetInsideTemp_V()
+        temp = GetOutsideTemp_V()
         TempMsg = "$WIMTA," & temp & vbCrLf
         Console.WriteLine(TempMsg)
         Create_Temp_msg = TempMsg
     End Function
     Function Create_Bar_msg() As String
-        Dim bar As Single
+        Dim bar As Short
         Dim barMsg As String
 
-        bar = GetBarometer()
-        barMsg = "$WIMTA," & bar & vbCrLf
+        bar = GetBarometerData_V()
+        barMsg = "$WIMMB," & bar & vbCrLf
         Console.WriteLine(barMsg)
         Create_Bar_msg = barMsg
+    End Function
+    Function Create_Humidity_msg() As String
+        Dim Humidity As Short
+        Dim Humidity_msg As String
+
+        Humidity = GetOutsideHumidity_V()
+        Humidity_msg = "$WIMHU," & Humidity & vbCrLf
+        Console.WriteLine(Humidity_msg)
+        Create_Humidity_msg = Humidity_msg
     End Function
     Sub Broadcast_MSG(msgs As StringCollection)
         Dim broadcast As IPAddress = IPAddress.Parse("192.168.0.37")
@@ -88,4 +101,7 @@ Module VantageVue
         Next
 
     End Sub
+
+   
+
 End Module
