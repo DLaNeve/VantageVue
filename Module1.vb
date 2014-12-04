@@ -41,8 +41,9 @@ Module VantageVue
 
         windspeed = GetWindSpeed_V()
         windDir = GetWindDir_V()
-        windmsg = "$WIMWV,30.1,R,15.3,N,A," & vbCrLf
-        ' windmsg = "$WIVWR," & windDir & ",R," & windspeed & ",N,A,*" & vbCrLf
+        'windmsg = "$WIVWR,30.1,R,15.3,N,,,," & vbCrLf
+        'windmsg = "$WIMWV," & windDir & ",R," & windspeed & ",N,A," & vbCrLf
+        windmsg = "$WIVWR," & windDir & ",R," & windspeed & ",N,,,," & vbCrLf
         Console.WriteLine(windmsg)
         Create_Wind_msg = windmsg
     End Function
