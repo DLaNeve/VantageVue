@@ -7,6 +7,8 @@ Module VantageVue
 
         LoadCurrentVantageData_V()
         msgs.Add(Create_Wind_msg())
+        msgs.Add(Create_Temp_msg())
+        msgs.Add(Create_Bar_msg())
         Broadcast_MSG(msgs)
 
         msgs.Clear()
@@ -41,13 +43,30 @@ Module VantageVue
 
         windspeed = GetWindSpeed_V()
         windDir = GetWindDir_V()
-        'windmsg = "$WIVWR,30.1,R,15.3,N,,,," & vbCrLf
-        'windmsg = "$WIMWV," & windDir & ",R," & windspeed & ",N,A," & vbCrLf
+        'windmsg = "$WIVWR,30.1,R,15.3,N,,,," & vbCrLf  a different method that also works
         windmsg = "$WIVWR," & windDir & ",R," & windspeed & ",N,,,," & vbCrLf
         Console.WriteLine(windmsg)
         Create_Wind_msg = windmsg
     End Function
 
+    Function Create_Temp_msg() As String
+        Dim temp As Single
+        Dim TempMsg As String
+
+        temp = GetInsideTemp_V()
+        TempMsg = "$WIMTA," & temp & vbCrLf
+        Console.WriteLine(TempMsg)
+        Create_Temp_msg = TempMsg
+    End Function
+    Function Create_Bar_msg() As String
+        Dim bar As Single
+        Dim barMsg As String
+
+        bar = GetBarometer()
+        barMsg = "$WIMTA," & bar & vbCrLf
+        Console.WriteLine(barMsg)
+        Create_Bar_msg = barMsg
+    End Function
     Sub Broadcast_MSG(msgs As StringCollection)
         Dim broadcast As IPAddress = IPAddress.Parse("192.168.0.37")
         Dim ep As New IPEndPoint(broadcast, 10110)
