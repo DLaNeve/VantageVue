@@ -579,7 +579,7 @@ Module VantageProDll
     Public Function LoadCurrentVantageData_V() As Int16
     End Function
     <DllImport("VantagePro.dll", CharSet:=CharSet.Ansi, CallingConvention:=CallingConvention.StdCall)> _
-    Public Function GetBarometer() As Single
+    Public Function GetBarometer_V() As Single
     End Function
     <DllImport("VantagePro.dll", CharSet:=CharSet.Ansi, CallingConvention:=CallingConvention.StdCall)> _
     Public Function GetOutsideTemp_V() As Single
