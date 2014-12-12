@@ -585,7 +585,7 @@ Module VantageProDll
     Public Function GetOutsideTemp_V() As Single
     End Function
     <DllImport("VantagePro.dll", CharSet:=CharSet.Ansi, CallingConvention:=CallingConvention.StdCall)> _
-    Public Function GetDewPt() As Single
+    Public Function GetDewPt_V() As Single
     End Function
     <DllImport("VantagePro.dll", CharSet:=CharSet.Ansi, CallingConvention:=CallingConvention.StdCall)> _
     Public Function GetWindChill() As Single

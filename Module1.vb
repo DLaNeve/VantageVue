@@ -8,9 +8,9 @@ Module VantageVue
         Do Until True = False
             LoadCurrentVantageData_V()
             msgs.Add(Create_Wind_msg())
-            msgs.Add(Create_Temp_msg())
-            msgs.Add(Create_Bar_msg())
-            msgs.Add(Create_Humidity_msg())
+            ' msgs.Add(Create_Temp_msg())
+            msgs.Add(Create_Misc_msg())
+            ' msgs.Add(Create_Humidity_msg())
             Broadcast_MSG(msgs)
             msgs.Clear()
             System.Threading.Thread.Sleep(3000)
@@ -51,39 +51,24 @@ Module VantageVue
         Create_Wind_msg = windmsg
     End Function
 
-    Function Create_Temp_msg() As String
-        Dim temp As Single
-        Dim TempMsg As String
-
-        '$IIXDR,P,1.02481,B,Barometer*0D
-        '$IIXDR,C,19.52,C,TempAir*3D
-        '$IIMTA,19.52,C*1E
-
-
-        temp = GetInsideTemp_V()
-        TempMsg = "$WIMTA," & temp & ",C" & vbCrLf
-        'TempMsg = "$WIXDR" & ",c," & temp & ",C1C" & vbCrLf
-        Console.WriteLine(TempMsg)
-        Create_Temp_msg = TempMsg
-    End Function
-    Function Create_Bar_msg() As String
-        Dim bar As Short
-        Dim barMsg As String
+    Function Create_Misc_msg() As String
+        Dim bar As Single
+        Dim Temp As Single
+        Dim Humidity As Single
+        Dim Dew As Single
+        Dim MiscMsg As String
 
         bar = GetBarometer_V()
-        barMsg = "$WIMMB," & bar & ",,,B" & vbCrLf
-        Console.WriteLine(barMsg)
-        Create_Bar_msg = barMsg
-    End Function
-    Function Create_Humidity_msg() As String
-        Dim Humidity As Single
-        Dim Humidity_msg As String
+        Temp = (GetOutsideTemp_V() - 32) * 5 / 9
+        Humidity = GetOutsideHumidity_V()
+        Dew = (GetDewPt_V() - 32) * 5 / 9
 
-        Humidity = GetInsideHumidity_V()
-        Humidity_msg = "$WIMHU," & Humidity & vbCrLf
-        Console.WriteLine(Humidity_msg)
-        Create_Humidity_msg = Humidity_msg
+        MiscMsg = "$WIMDA," & bar & ",I,,," & Temp & ",C,,," & Humidity & ",," & Dew & ",C,,,,,,,,," & vbCrLf
+
+        Console.WriteLine(MiscMsg)
+        Create_Misc_msg = MiscMsg
     End Function
+    
     Sub Broadcast_MSG(msgs As StringCollection)
         ' Dim broadcast As IPAddress = IPAddress.Parse("192.168.0.37")
         ' Dim ep As New IPEndPoint(broadcast, 10110)
